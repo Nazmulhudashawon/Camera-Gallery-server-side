@@ -24,6 +24,13 @@ async function run() {
     const productsCollection = database.collection('products');
     const usersCollection = database.collection('users');
 
+     // GET API
+     app.get('/products', async (req, res) => {
+      const cursor = productsCollection.find({});
+      const products = await cursor.toArray();
+      res.send(products);
+  });
+
     app.get('/user', async (req, res) => {
       const email = req.query.email;
       const query = { email: email }
