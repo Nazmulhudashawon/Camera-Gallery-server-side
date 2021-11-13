@@ -22,6 +22,7 @@ async function run() {
     await client.connect();
     const database = client.db('camera_site');
     const productsCollection = database.collection('products');
+    const ordersCollection = database.collection('orders');
     const usersCollection = database.collection('users');
 
      // GET API
@@ -31,21 +32,30 @@ async function run() {
       res.send(products);
   });
 
-    app.get('/user', async (req, res) => {
+ //order from user
+    app.get('/order', async (req, res) => {
       const email = req.query.email;
       const query = { email: email }
       console.log(query);
-      const cursor = usersCollection.find(query);
-      const userinfo = await cursor.toArray();
-      res.json(userinfo);
+      const cursor = ordersCollection.find(query);
+      const userorder = await cursor.toArray();
+      res.json(userorder);
     });
 
-    app.post('/user', async (req, res) => {
-      const users = req.body;
-      const result = await usersCollection.insertOne(users);
+    app.post('/order', async (req, res) => {
+      const orders = req.body;
+      const result = await ordersCollection.insertOne(orders);
       console.log(result);
       res.json(result);
     });
+
+    //user from client site
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      console.log(result);
+      res.json(result);
+  });
   } finally {
     // await client.close();
   }
